@@ -1,11 +1,11 @@
 #
 # Database access functions for the web forum.
-# 
+#
 
 import time
 
 ## Database connection
-DB = []
+DB = [psycopg2.connect("dbname=forum")]
 
 ## Get posts from database.
 def GetAllPosts():
