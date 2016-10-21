@@ -48,6 +48,10 @@ def registerPlayer(name):
     c = conn.cursor()
     c.execute("INSERT INTO players (name) Values (%s)",(name,))
     conn.commit()
+    c.execute("SELECT id FROM players WHERE name = %s", (name,))
+    player_id = c.fetchone()
+    c.execute("INSERT INTO t_results (id, wins, matches) VALUES (%s, 0 ,0)", (player_id,))
+    conn.commit()
     conn.close()
 
 
@@ -66,9 +70,6 @@ def playerStandings():
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("INSERT INTO t_results SELECT id FROM players;")
-    c.execute("UPDATE t_results SET wins=0, matches=0")
-    conn.commit()
     c.execute("SELECT players.id, name, wins, matches FROM t_results LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;")
     val = c.fetchall()
     return val
@@ -81,7 +82,13 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-
+    conn = connect()
+    c = conn.cursor()
+    c.execute("UPDATE t_results set wins = wins+1, matches = matches+1  where t_results.id=%s;", (winner,))
+    conn.commit()
+    c.execute("UPDATE t_results set matches = matches+1  where t_results.id=%s;", (loser,))
+    conn.commit()
+    conn.close()
 
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
