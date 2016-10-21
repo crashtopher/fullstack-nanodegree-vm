@@ -31,19 +31,25 @@ def countPlayers():
     """Returns the number of players currently registered."""
     conn = connect()
     c = conn.cursor()
-    c.execute("SELECT name, COUNT(*) as num, FROM players GROUP BY name;")
+    c.execute("SELECT COUNT(*) as num FROM players;")
     return c
     conn.close()
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
 
-    The database assigns a unique serial id number for the player.  (This
-    should be handled by your SQL database schema, not in your Python code.)
+    The database assigns a unique serial id number for the player.
 
     Args:
       name: the player's full name (need not be unique).
     """
+    conn = connect()
+    c = conn.cursor()
+    query("INSERT INTO players (name) VALUES('%s');")
+    data = name
+    c.execute(query, data)
+    conn.commit()
+    conn.close()
 
 
 def playerStandings():
