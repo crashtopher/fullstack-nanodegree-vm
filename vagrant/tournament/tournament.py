@@ -19,6 +19,7 @@ def deleteMatches():
     conn.commit()
     conn.close()
 
+
 def deletePlayers():
     """Remove all the player records from the database."""
     conn = connect()
@@ -28,6 +29,7 @@ def deletePlayers():
     conn.commit()
     conn.close()
 
+
 def countPlayers():
     """Returns the number of players currently registered."""
     conn = connect()
@@ -36,6 +38,7 @@ def countPlayers():
     val = c.fetchone()[0]
     return val
     conn.close()
+
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
@@ -47,11 +50,12 @@ def registerPlayer(name):
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("INSERT INTO players (name) Values (%s)",(name,))
+    c.execute("INSERT INTO players (name) Values (%s)", (name,))
     conn.commit()
     c.execute("SELECT id FROM players WHERE name = %s", (name,))
     player_id = c.fetchone()
-    c.execute("INSERT INTO t_results (id, wins, matches) VALUES (%s, 0 ,0)", (player_id,))
+    c.execute(
+        "INSERT INTO t_results (id, wins, matches) VALUES (%s, 0 ,0)", (player_id,))
     conn.commit()
     conn.close()
 
@@ -71,10 +75,13 @@ def playerStandings():
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("SELECT players.id, name, wins, matches FROM t_results LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;")
+    c.execute(
+        """SELECT players.id, name, wins, matches FROM t_results
+           LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;""")
     val = c.fetchall()
     return val
     conn.close()
+
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -85,11 +92,16 @@ def reportMatch(winner, loser):
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("UPDATE t_results set wins = wins+1, matches = matches+1  where t_results.id=%s;", (winner,))
+    c.execute(
+        """UPDATE t_results set wins = wins+1, matches = matches+1
+           where t_results.id=%s;""", (winner,))
     conn.commit()
-    c.execute("UPDATE t_results set matches = matches+1  where t_results.id=%s;", (loser,))
+    c.execute(
+        """UPDATE t_results set matches = matches+1
+           where t_results.id=%s;""", (loser,))
     conn.commit()
     conn.close()
+
 
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
@@ -108,7 +120,10 @@ def swissPairings():
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("CREATE VIEW standings AS SELECT players.id, name, wins, matches FROM t_results LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;")
+    c.execute(
+        """CREATE VIEW standings AS
+           SELECT players.id, name, wins, matches FROM t_results
+           LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;""")
     c.execute("SELECT id, name FROM standings;")
     info = c.fetchall()
     pairings = []
