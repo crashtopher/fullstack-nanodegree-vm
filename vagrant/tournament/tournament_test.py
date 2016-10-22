@@ -35,7 +35,6 @@ def testCount():
         raise ValueError(
             "After two players register, countPlayers() should be 2. Got {c}".format(c=c))
     print "3. countPlayers() returns 2 after two players are registered."
-    deleteMatches()
     deletePlayers()
     c = countPlayers()
     if c != 0:

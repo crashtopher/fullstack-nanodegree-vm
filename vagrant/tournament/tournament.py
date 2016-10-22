@@ -15,7 +15,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     conn = connect()
     c = conn.cursor()
-    c.execute("DELETE FROM t_results;")
+    c.execute("UPDATE t_results Set wins = 0, matches = 0;")
     conn.commit()
     conn.close()
 
@@ -23,6 +23,7 @@ def deletePlayers():
     """Remove all the player records from the database."""
     conn = connect()
     c = conn.cursor()
+    c.execute("DELETE FROM t_results;")
     c.execute("DELETE FROM players;")
     conn.commit()
     conn.close()
@@ -105,5 +106,20 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-
-
+    conn = connect()
+    c = conn.cursor()
+    c.execute("CREATE VIEW standings AS SELECT players.id, name, wins, matches FROM t_results LEFT JOIN players ON players.id=t_results.id ORDER BY wins DESC;")
+    c.execute("SELECT id, name FROM standings;")
+    info = c.fetchall()
+    pairings = []
+    v1 = info[0] + info[1]
+    v2 = info[2] + info[3]
+    v3 = info[4] + info[5]
+    v4 = info[6] + info[7]
+    pairings.append(v1)
+    pairings.append(v2)
+    pairings.append(v3)
+    pairings.append(v4)
+    return pairings
+    c.execute("DROP VIEW standings")
+    conn.close()
