@@ -6,8 +6,9 @@ from database_setup import Base, Restaurant, MenuItem
 
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
-DBSession = sessionmaker(bind = engine)
+DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
 
 class webserverHandler(BaseHTTPRequestHandler):
 
@@ -21,11 +22,14 @@ class webserverHandler(BaseHTTPRequestHandler):
 
                 output = "<html><body>"
                 output += "<h1>Restaurants:</h1>"
-                output += "<a href='/new'>Make a New restaurant</a><br><br><br>"
+                output += """<a href='/new'>
+                          Make a New restaurant</a><br><br><br>"""
                 for restaurant in restaurants:
                     output += restaurant.name
-                    output += "<br><a href='/%s/edit'>Edit</a><br>" % restaurant.id
-                    output += "<a href='/%s/delete'>Delete</a><br>" % restaurant.id
+                    output += """<br>
+                              <a href='/%s/edit'>Edit</a><br>""" % restaurant.id
+                    output += """<a href='/%s/delete'>Delete</a>
+                              <br>""" % restaurant.id
                     output += "<br>"
 
                 output += "</body></html>"
@@ -39,9 +43,11 @@ class webserverHandler(BaseHTTPRequestHandler):
                 self.end_headers()
 
                 output = "<html><body>"
-                output += "<form method='POST' enctype='multipart/form-data' action='/restaurants/new'>"
+                output += """<form method='POST' enctype='multipart/form-data'
+                          action='/restaurants/new'>"""
                 output += "<h2>Create a New Restaurant</h2><br>"
-                output += "<input name='newRestaurantName' 'type='text' placeholder='New Restaurant Name'> <input type='submit'>"
+                output += """<input name='newRestaurantName' 'type='text'
+                          placeholder='New Restaurant Name'> <input type='submit'>"""
                 output += "</body></html>"
                 self.wfile.write(output)
                 print output
@@ -60,8 +66,10 @@ class webserverHandler(BaseHTTPRequestHandler):
                     output += "<h2>"
                     output += IDQuery.name
                     output += "</h2>"
-                    output += "<form method='POST' enctype='multipart/form-data' action = '/%s/edit' >" % restaurantIDPath
-                    output += "<input name = 'newRestaurantName' type='text' placeholder = '%s' >" % IDQuery.name
+                    output += """<form method='POST'
+                               enctype='multipart/form-data' action = '/%s/edit' >""" % restaurantIDPath
+                    output += """<input name = 'newRestaurantName'
+                              type='text' placeholder = '%s' >""" % IDQuery.name
                     output += "<input type = 'submit'>"
                     output += "</form>"
                     output += "</body></html>"
@@ -89,6 +97,26 @@ class webserverHandler(BaseHTTPRequestHandler):
                     self.send_header('Content-type', 'text/html')
                     self.send_header('Location', '/restaurants')
                     self.end_headers()
+
+            if self.path.endswith("/edit"):
+                ctype, pdict = cgi.parse_header(
+                    self.headers.getheader('content-type'))
+                if ctype == 'multipart/form-data':
+                    fields = cgi.parse_multipart(self.rfile, pdict)
+                    messagecontent = fields.get('newRestaurantName')
+                    restaurantIDPath = self.path.split("/")[1]
+
+                    IDQuery = session.query(Restaurant).filter_by(
+                        id=restaurantIDPath).one()
+                    if IDQuery != []:
+                        IDQuery.name = messagecontent[0]
+                        session.add(myRestaurantQuery)
+                        session.commit()
+
+                        self.send_response(301)
+                        self.send_header('Content-type', 'text/html')
+                        self.send_header('Location', '/restaurants')
+                        self.end_headers()
 
         except:
             pass
