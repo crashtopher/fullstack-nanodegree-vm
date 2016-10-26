@@ -24,8 +24,8 @@ class webserverHandler(BaseHTTPRequestHandler):
                 output += "<a href='/new'>Make a New restaurant</a><br><br><br>"
                 for restaurant in restaurants:
                     output += restaurant.name
-                    output += "<br><a href='/edit'>Edit</a><br>"
-                    output += "<a href='/delete'>Delete</a><br>"
+                    output += "<br><a href='/%s/edit'>Edit</a><br>" % restaurant.id
+                    output += "<a href='/%s/delete'>Delete</a><br>" % restaurant.id
                     output += "<br>"
 
                 output += "</body></html>"
@@ -46,6 +46,27 @@ class webserverHandler(BaseHTTPRequestHandler):
                 self.wfile.write(output)
                 print output
                 return
+
+            if self.path.endswith("/edit"):
+                restaurantIDPath = self.path.split("/")[1]
+                IDQuery = session.query(Restaurant).filter_by(
+                    id=restaurantIDPath).one()
+                if IDQuery:
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    output = "<html><body>"
+                    output += "<h1> Rename Your Restaurant </h1>"
+                    output += "<h2>"
+                    output += IDQuery.name
+                    output += "</h2>"
+                    output += "<form method='POST' enctype='multipart/form-data' action = '/%s/edit' >" % restaurantIDPath
+                    output += "<input name = 'newRestaurantName' type='text' placeholder = '%s' >" % IDQuery.name
+                    output += "<input type = 'submit'>"
+                    output += "</form>"
+                    output += "</body></html>"
+
+                    self.wfile.write(output)
 
         except IOError:
             self.send_error(404, "File Not Found %s" % self.path)
