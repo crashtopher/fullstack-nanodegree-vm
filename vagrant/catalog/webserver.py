@@ -76,6 +76,24 @@ class webserverHandler(BaseHTTPRequestHandler):
 
                     self.wfile.write(output)
 
+            if self.path.endswith("/delete"):
+                restaurantIDPath = self.path.split("/")[1]
+                IDQuery = session.query(Restaurant).filter_by(
+                    id=restaurantIDPath).one()
+                if IDQuery:
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    output = "<html><body>"
+                    output += """<h1> Are You Sure You Want To
+                              Delete %s?</h1>""" % IDQuery.name
+                    output += """<form method='POST'
+                               enctype='multipart/form-data'
+                               action = '/%s/delete' >""" % restaurantIDPath
+                    output += "<input type='submit' value='Delete'></form>"
+
+                    self.wfile.write(output)
+
         except IOError:
             self.send_error(404, "File Not Found %s" % self.path)
 
