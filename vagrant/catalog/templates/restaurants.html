@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div>
+        <h1>Restaurant Hub</h1>
+    </div>
+    <div>
+        <h2>View Menus From Your Favorite Restaurants</h2>
+    </div>
+    <div>
+        <a href="#">Create A New Restaurant</a>
+    </div>
+    <div>
+        {% for r in restaurants %}
+            <p>
+                <h3><a href="#">{{r.name}}</a></h3>
+            </p>
+        {% endfor %}
+    </div>
+</body>
+</html>

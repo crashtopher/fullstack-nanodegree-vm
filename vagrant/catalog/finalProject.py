@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 app = Flask(__name__)
 
 #Fake Restaurants
@@ -14,7 +14,7 @@ item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$
 @app.route('/')
 @app.route('/restaurants/')
 def showRestaurants():
-    return "This Page Will Show My Restaurants!"
+    return render_template('restaurants.html', restaurants=restaurants)
 
 @app.route('/restaurant/new/')
 def newRestaurant():
