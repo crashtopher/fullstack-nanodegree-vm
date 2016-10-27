@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
 app = Flask(__name__)
 
 from sqlalchemy import create_engine
@@ -11,8 +11,35 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Making an API Endpoint (GET REQUEST)
+
+
+@app.route('/restaurant/<int:restaurant_id>/menu/JSON/')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(
+        restaurant_id=restaurant_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+
+@app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/JSON/')
+def restaurantMenuItemJSON(restaurant_id, menu_id):
+    menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(menuItem.serialize)
+
 
 @app.route('/')
+def mainpage():
+    restaurants = session.query(Restaurant).all()
+    output = ""
+    for restaurant in restaurants:
+        output += restaurant.name
+        output += '\n'
+        output += str(restaurant.id)
+        output += '<br>'
+    return output
+
+
 @app.route('/restaurant/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -69,7 +96,8 @@ def deleteMenuItem(restaurant_id, menu_id):
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template(
-            'deletemenuitem.html', restaurant_id=restaurant_id, item=deletedItem)
+             'deletemenuitem.html',
+             restaurant_id=restaurant_id, item=deletedItem)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
