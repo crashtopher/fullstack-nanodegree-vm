@@ -44,7 +44,7 @@ def editMenuItem(restaurant_id, menu_id):
 
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete/')
 def deleteMenuItem(restaurant_id, menu_id):
-    return "This Page Will Delete Menu Item #%s" % str(menu_id)
+    return render_template('deletemenuitem.html', item=item)
 
 
 if __name__ == '__main__':
