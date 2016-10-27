@@ -22,7 +22,7 @@ def newRestaurant():
 
 @app.route('/restaurant/<int:restaurant_id>/edit')
 def editRestaurant(restaurant_id):
-    return "This Page Will Edit Restaurant #%s" % str(restaurant_id)
+    return render_template('editrestaurant.html', restaurant=restaurant)
 
 @app.route('/restaurant/<int:restaurant_id>/delete')
 def deleteRestaurant(restaurant_id):
