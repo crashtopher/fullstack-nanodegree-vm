@@ -7,7 +7,7 @@
     <div>
         <h1>Add Your Restaurant!</h1>
     </div>
-    <form>
+    <form method="POST">
         <table>
             <tr>
                 <td>
@@ -20,7 +20,7 @@
                     <input type="submit">
                 </td>
                 <td>
-                    <a href="#">Cancel</a>
+                    <a href="{{url_for('showRestaurants')}}">Cancel</a>
                 </td>
             </tr>
         </table>

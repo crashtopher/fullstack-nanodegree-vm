@@ -5,9 +5,9 @@
 </head>
 <body>
     <div>
-        <h1>Add A Menu Item To {{restaurant}}</h1>
+        <h1>Add A Menu Item To {{restaurant.name}}</h1>
     </div>
-    <form>
+    <form method="POST">
         <table>
             <tr>
                 <td>
@@ -30,7 +30,7 @@
                     Description:
                 </td>
                 <td>
-                    <textarea placeholder="delicious food"></textarea>
+                    <textarea placeholder="delicious food" name="description"></textarea>
                 </td>
             </tr>
             <tr>
@@ -46,7 +46,7 @@
                     <input type="submit">
                 </td>
                 <td>
-                    <a href="#">Cancel</a>
+                    <a href="{{url_for('showMenu', restaurant_id=restaurant.id)}}">Cancel</a>
                 </td>
             </tr>
         </table>

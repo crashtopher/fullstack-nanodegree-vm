@@ -5,20 +5,22 @@
 </head>
 <body>
     <div>
-        <h1>Need To Edit Your Restaurant?</h1>
+        <h1>Need To Edit {{restaurant.name}}?</h1>
     </div>
-    <table>
-        <tr>
-            <td>
-                <input type="text" name="name" placeholder="{{restaurant}}">
-            </td>
-            <td>
-                <input type="submit" value="Edit">
-            </td>
-            <td>
-                <a href="#">Cancel</a>
-            </td>
-        </tr>
-    </table>
+    <form method="POST">
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="name" placeholder="{{restaurant.name}}">
+                </td>
+                <td>
+                    <input type="submit" value="Edit">
+                </td>
+                <td>
+                    <a href="{{url_for('showRestaurants')}}">Cancel</a>
+                </td>
+            </tr>
+        </table>
+    </form>
 </body>
 </html>

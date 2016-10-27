@@ -5,16 +5,15 @@
 </head>
 <body>
     <div>
-        <h1>Are You Sure You Want To Delete {{item}}?</h1>
+        <h1>Are You Sure You Want To Delete {{item.name}}?</h1>
     </div>
     <div>
         <h3>It Will Be Permanently Removed From Our Database</h3>
     </div>
-    <form>
+    <form method="POST">
         <input type="radio" name="delete" value="yes"> Yes
         <input type="radio" name="delete" value="no"> No
         <input type="submit">
-        <a href="#">Cancel</a>
     </form>
 </body>
 </html>

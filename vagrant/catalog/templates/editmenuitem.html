@@ -5,16 +5,16 @@
 </head>
 <body>
     <div>
-        <h1>Let's Change {{item}}'s Info!</h1>
+        <h1>Let's Change {{item.name}}'s Info!</h1>
     </div>
-    <form>
+    <form method="POST">
         <table>
             <tr>
                 <td>
                     Name:
                 </td>
                 <td>
-                    <input type="text" size="30" name="name" placeholder="{{item}}">
+                    <input type="text" size="30" name="name" placeholder="{{item.name}}">
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     Course:
                 </td>
                 <td>
-                    <input type="text" size="30" name="course" placeholder="{{item}}">
+                    <input type="text" size="30" name="course" placeholder="{{item.course}}">
                 </td>
             </tr>
             <tr>
@@ -30,7 +30,7 @@
                     Description:
                 </td>
                 <td>
-                    <textarea placeholder="{{item}}"></textarea>
+                    <textarea name="description" placeholder="{{item.description}}"></textarea>
                 </td>
             </tr>
             <tr>
@@ -38,7 +38,7 @@
                     Price:
                 </td>
                 <td>
-                    <input type="text" size="30" name="price" placeholder="{{item}}">
+                    <input type="text" size="30" name="price" placeholder="{{item.price}}">
                 </td>
             </tr>
             <tr>
@@ -46,7 +46,7 @@
                     <input type="submit">
                 </td>
                 <td>
-                    <a href="#">Cancel</a>
+                    <a href="{{url_for('showMenu', restaurant_id=restaurant.id)}}">Cancel</a>
                 </td>
             </tr>
         </table>

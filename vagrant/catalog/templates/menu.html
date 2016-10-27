@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<h1>{{restaurant}}</h1>
+<h1>{{restaurant.name}}</h1>
 
 <h2>Here's What We Have</h2>
 
@@ -20,14 +20,15 @@
     {% endif %}
     {% endwith %}
 
-<a href="#">Create New Item</a>
+<a href="{{url_for('showRestaurants')}}">Go Back</a>
+<a href="{{url_for('newMenuItem', restaurant_id=restaurant.id)}}">Create New Item</a>
 
 {% for i in items %}
 
 <div>
 
 <p>
-{{i.name}}
+<h3>{{i.name}}</h3>
 <br>
 {{i.description}}
 <br>
@@ -35,9 +36,9 @@
 <br>
 {{i.price}}
 <br>
-<a href='#'>Edit</a>
+<a href="{{url_for('editMenuItem', restaurant_id=restaurant.id, menu_id=i.id)}}">Edit</a>
 <br>
-<a href='#'>Delete</a>
+<a href="{{url_for('deleteMenuItem', restaurant_id=restaurant.id, menu_id=i.id)}}">Delete</a>
 </p>
 </div>
 
