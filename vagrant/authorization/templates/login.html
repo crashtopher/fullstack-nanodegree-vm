@@ -1,3 +1,6 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
 <head>
 
   <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
@@ -11,14 +14,22 @@
 
 </head>
 
-
 <body>
+<div class="row divider green">
+    <div class="col-md-12"></div>
+  </div>
+  <div class="row banner menu">
+    <div class="col-md-11 col-md-offset-1 padding-none">
+      <h1>Log In</h1>
+    </div>
+  </div>
 
-
+<div class="row">
+    <div class="col-md-6 col-md-offset-1 padding-top">
 <!-- GOOGLE PLUS SIGN IN-->
 
 
-          <div id="signInButton">
+          <div class="btn btn-default" id="signInButton">
           <span class="g-signin"
             data-scope="openid email"
             data-clientid="394942387470-4d9aam5rdn6rrgr9fpga0mtguo7a216s.apps.googleusercontent.com"
@@ -65,7 +76,8 @@ function signInCallback(authResult) {
 
 
 <!--END GOOGLE PLUS SIGN IN -->
-
+  </div>
+  <div class="col-md-6 col-md-offset-1 padding-top">
 <!--FACEBOOK SIGN IN -->
 <script>
   window.fbAsyncInit = function() {
@@ -118,7 +130,7 @@ function signInCallback(authResult) {
 </script>
 
 
-<button>
+<button class="btn btn-default">
 
 
           <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
@@ -129,7 +141,8 @@ function signInCallback(authResult) {
 
         </button>
 <!--END FACEBOOK SIGN IN -->
-
+    </div>
+  </div>
   </body>
-
+{% endblock %}
   </html>
